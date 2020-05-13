@@ -72,47 +72,4 @@ class TextStoryWidgetState extends State<TextStoryWidget> {
     ));
   }
 
-//  List<Widget> addWidgets(context) {
-//    List<Widget> list = new List();
-//    list.add(GestureDetector(
-//        onTap: () {
-////          addNew();
-//          widget.stackFunction();
-//        },
-//        child: new Container(
-//          color: Colors.blue,
-//          width: MediaQuery.of(context).size.width,
-//          height: MediaQuery.of(context).size.height,
-//        )));
-//
-//    for (int i = 0; i < 5; i++) {
-//      notifiers.add(new ValueNotifier(Matrix4.identity()));
-//      prevPosn.add(Matrix4.identity());
-//      texts.add(i.toString());
-//      list.add(v.newTextPaint(notifiers[i], notifiers, prevPosn, texts[i], i));
-//    }
-//    return list;
-//  }
-
-//  void addNew() {
-//    setState(() {
-//      widget.notifiers[widget.widgetCount].value = Matrix4.identity();
-//      widget.texts[widget.widgetCount] = "ABCD";
-//    });
-//     widget.widgetCount++;
-//  }
-
-//  void addNewText(String text) {
-//    setState(() {
-//      widget.notifiers.add(new ValueNotifier(Matrix4.identity()));
-//      widget.prevPositions.add(Matrix4.identity());
-//      widget.texts.add(text);
-//      widget.widgets.add(v.newTextPaint(widget.notifiers[0], widget.notifiers,
-//          widget.prevPositions, widget.texts[0], 0));
-//      widget.notifiers[widget.widgetCount].value = Matrix4.identity();
-//
-//      print("New");
-//    });
-//  }
-
 }
