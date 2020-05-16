@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:writogram/Modals/StoryData.dart';
+import 'package:writogram/Modals/TextCompleteData.dart';
 
 import 'CreateTextWidget.dart';
 import 'StoryWidgetHandeler.dart';
@@ -43,14 +44,19 @@ class _StoryClassState extends State<StoryClass> {
         ),
         Visibility(
           visible: createTextVisible,
-          child: CreateTextStory(doneCallback: doneCallback),
+          child: CreateTextStory(doneCallback: doneCallback,stackSwitchCallback: switchStackCallback,),
         )
       ],
     );
   }
 
-  void doneCallback() {
+  void doneCallback(TextCompleteData completeData) {
     print("DoneCallBack");
+    setState(() {
+      storyData[completeData.index].text = completeData.text;
+      switchStackCallback();
+    });
+
   }
 
   void updateTransform(Matrix4 m, int index) {

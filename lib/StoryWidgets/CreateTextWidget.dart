@@ -1,14 +1,14 @@
-import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:writogram/Modals/TextCompleteData.dart';
 import 'package:writogram/Widgets/CustomTextStoryWodgets/CustomFontChooserWidget.dart';
 import 'package:writogram/imported/Swatches.dart';
 
 class CreateTextStory extends StatefulWidget {
   final Function doneCallback;
-
-  CreateTextStory({this.doneCallback});
+  final Function stackSwitchCallback;
+  CreateTextStory({this.doneCallback,this.stackSwitchCallback});
 
   @override
   _CreateTextStoryState createState() => _CreateTextStoryState();
@@ -38,6 +38,7 @@ class _CreateTextStoryState extends State<CreateTextStory> {
     fillBox = false;
     valueHolder = 30;
     sliderVisible = true;
+    controller = new TextEditingController();
   }
 
   @override
@@ -85,6 +86,7 @@ class _CreateTextStoryState extends State<CreateTextStory> {
                     alignment: Alignment.center,
                     color: Colors.white.withOpacity(0.2),
                     child: TextField(
+                      controller: controller,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration.collapsed(
                         hintText: "Text..",
@@ -193,7 +195,17 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   }
 
   void doneCallback() {
-    widget.doneCallback();
+
+    if(controller.text.toString().trim().isEmpty)
+      {
+        widget.stackSwitchCallback();
+        return;
+      }
+
+    TextStyle t = new TextStyle(color: color,fontFamily: textStyle.fontFamily,fontSize: size,fontStyle: FontStyle.italic);
+    TextCompleteData completeData = new TextCompleteData(text: controller.text.toString(),textStyle: t,position: Matrix4.identity(),index: 0);
+    print("Complete Data Created");
+    widget.doneCallback(completeData);
   }
 
   void fillBoxSwitch() {
