@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
@@ -11,9 +12,6 @@ class StoryWidgetHandler extends StatefulWidget {
   final Function updateTransform;
   final Function stackSwitchCallback;
 
-
-
-
   StoryWidgetHandler(
       {this.storyData, this.updateTransform, this.stackSwitchCallback});
 
@@ -24,6 +22,7 @@ class StoryWidgetHandler extends StatefulWidget {
 class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
   Queue<Color> backgroundColors = new Queue();
   Color backgroundColor;
+  bool disabled;
 
   @override
   void initState() {
@@ -31,14 +30,25 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
     super.initState();
     backgroundColor = Colors.black;
     backgroundColors.add(Colors.black);
-    for(int i=0;i<swatches.length;i+=10){
+    for (int i = 0; i < swatches.length; i += 10) {
       backgroundColors.add(swatches[i].withOpacity(1));
     }
+    disabled = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onHorizontalDragEnd: (value) {
+        setState(() {
+          disabled = false;
+        });
+      },
+      onHorizontalDragStart: (value) {
+      setState(() {
+        disabled = true;
+      });
+    },
       onHorizontalDragUpdate: (value) {
         debugPrint("Slide to Change backGround");
         updateBackground(value.globalPosition.dx);
@@ -48,7 +58,7 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
       },
       child: AnimatedContainer(
           duration: Duration(milliseconds: 500),
-          color:  backgroundColor,
+          color: backgroundColor,
           padding: EdgeInsets.all(10),
           child: StoryPaintWidget(
             storyData: widget.storyData,
@@ -57,23 +67,22 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
     );
   }
 
-
-  double prev;
   updateBackground(double value) {
+    if (!disabled) return;
     setState(() {
-      print("Update Background "+ value.toString());
-      if(value>400)
-        {
-          backgroundColors.addFirst(backgroundColors.last);
-          backgroundColors.removeLast();
-          backgroundColor = backgroundColors.first;
-        }
-      else if(value <50){
+      print("Update Background " + value.toString());
+      if (value > 400) {
+        disabled = false;
+        backgroundColors.addFirst(backgroundColors.last);
+        backgroundColors.removeLast();
+        backgroundColor = backgroundColors.first;
+      } else if (value < 50) {
+        disabled = false;
         backgroundColors.addLast(backgroundColors.first);
         backgroundColors.removeFirst();
         backgroundColor = backgroundColors.last;
       }
-      });
+    });
   }
 
   void updateTransform(Matrix4 m, int index) {
