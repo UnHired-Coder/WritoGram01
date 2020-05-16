@@ -43,10 +43,14 @@ class _StoryClassState extends State<StoryClass> {
         ),
         Visibility(
           visible: createTextVisible,
-          child: CreateTextStory(),
+          child: CreateTextStory(doneCallback: doneCallback),
         )
       ],
     );
+  }
+
+  void doneCallback() {
+    print("DoneCallBack");
   }
 
   void updateTransform(Matrix4 m, int index) {
