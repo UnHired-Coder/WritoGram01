@@ -19,8 +19,6 @@ class _StoryClassState extends State<StoryClass> {
 
   TextStyle defaultTextStyle;
 
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -28,10 +26,10 @@ class _StoryClassState extends State<StoryClass> {
 
     defaultTextStyle = TextStyle(color: Colors.white, fontFamily: "DM_Mono");
 
-    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 0));
-    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 1));
-    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 2));
-    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 3));
+    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 0));
+    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 1));
+    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 2));
+    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 3));
     index = 0;
   }
 
@@ -41,6 +39,7 @@ class _StoryClassState extends State<StoryClass> {
       children: <Widget>[
         Scaffold(
           body: Visibility(
+            maintainState: true,
             visible: paintStoryVisible,
             child: Container(
               child: StoryWidgetHandler(
@@ -53,7 +52,11 @@ class _StoryClassState extends State<StoryClass> {
         ),
         Visibility(
           visible: createTextVisible,
-          child: CreateTextStory(doneCallback: doneCallback,stackSwitchCallback: switchStackCallback,index: index,),
+          child: CreateTextStory(
+            doneCallback: doneCallback,
+            stackSwitchCallback: switchStackCallback,
+            index: index,
+          ),
         )
       ],
     );
@@ -66,9 +69,8 @@ class _StoryClassState extends State<StoryClass> {
       storyData[completeData.index].transform = completeData.position;
       storyData[completeData.index].textStyle = completeData.textStyle;
       switchStackCallback();
-      index++;
     });
-
+    index++;
   }
 
   void updateTransform(Matrix4 m, int index) {

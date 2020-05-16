@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:writogram/Modals/TextCompleteData.dart';
@@ -9,7 +8,8 @@ class CreateTextStory extends StatefulWidget {
   final Function doneCallback;
   final Function stackSwitchCallback;
   final int index;
-  CreateTextStory({this.doneCallback,this.stackSwitchCallback,this.index});
+
+  CreateTextStory({this.doneCallback, this.stackSwitchCallback, this.index});
 
   @override
   _CreateTextStoryState createState() => _CreateTextStoryState();
@@ -34,10 +34,10 @@ class _CreateTextStoryState extends State<CreateTextStory> {
     fillBoxIcon = Icons.check_box_outline_blank;
     textStyle = TextStyle(color: Colors.white, fontFamily: "DM_Mono");
     color = Colors.white;
-    size = 30;
+    size = 50;
     boxColor = Colors.transparent;
     fillBox = false;
-    valueHolder = 30;
+    valueHolder = 50;
     sliderVisible = true;
     controller = new TextEditingController();
   }
@@ -196,15 +196,28 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   }
 
   void doneCallback() {
+    if (controller.text.toString().trim().isEmpty) {
+      widget.stackSwitchCallback();
+      return;
+    }
 
-    if(controller.text.toString().trim().isEmpty)
-      {
-        widget.stackSwitchCallback();
-        return;
-      }
+    //TODO:: Remove this later.
+    if (widget.index > 2) {
+      widget.stackSwitchCallback();
+      return;
+    }
 
-    TextStyle t = new TextStyle(color: color,fontFamily: textStyle.fontFamily,fontSize: size,fontStyle: FontStyle.italic,backgroundColor: boxColor);
-    TextCompleteData completeData = new TextCompleteData(text: controller.text.toString(),textStyle: t,position: Matrix4.identity()+Matrix4.identity(),index: widget.index);
+    TextStyle t = new TextStyle(
+        color: color,
+        fontFamily: textStyle.fontFamily,
+        fontSize: size,
+        fontStyle: FontStyle.italic,
+        backgroundColor: boxColor);
+    TextCompleteData completeData = new TextCompleteData(
+        text: controller.text.toString(),
+        textStyle: t,
+        position: Matrix4.identity(),
+        index: widget.index);
     print("Complete Data Created");
     widget.doneCallback(completeData);
   }

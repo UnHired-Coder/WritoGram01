@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
@@ -20,12 +22,17 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+//      alignment: Alignment.center,
       children: <Widget>[
         Positioned.fill(
             child: MatrixGestureDetector(
           onMatrixUpdate: (m, rs, ry, rx) {
             if (index != prev) {
-              m.setFrom(widget.storyData[index].transform);
+              m.setZero();
+              m.add(widget.storyData[index].transform);
+              print("Index: " + index.toString() + " Prev: " + prev.toString());
+//              prev = index;
+              print("Index: " + index.toString() + " Prev: " + prev.toString());
             }
             widget.updateTransform(m, index);
             prev = index;
@@ -47,6 +54,7 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                         : Colors.transparent,
                     child: Text(
                       widget.storyData[0].text,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: widget.storyData[0].textStyle.fontSize,
                           fontFamily: widget.storyData[0].textStyle.fontFamily,
@@ -70,6 +78,7 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                         : Colors.transparent,
                     child: Text(
                       widget.storyData[1].text,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: widget.storyData[0].textStyle.fontSize,
                           fontFamily: widget.storyData[1].textStyle.fontFamily,
@@ -93,6 +102,7 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                         : Colors.transparent,
                     child: Text(
                       widget.storyData[2].text,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: widget.storyData[2].textStyle.fontSize,
                           fontFamily: widget.storyData[2].textStyle.fontFamily,
