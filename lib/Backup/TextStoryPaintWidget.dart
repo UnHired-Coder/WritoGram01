@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
-import 'package:writogram/StoryWidgets/PainterWidgit.dart';
+import 'file:///E:/Flutter/firestore_app/writo_gram/lib/Backup/PainterWidgit.dart';
 
 class TextStoryWidget extends StatefulWidget {
   final Function stackFunction;
@@ -14,6 +14,7 @@ class TextStoryWidget extends StatefulWidget {
   List<Container> widgets;
   List<String> texts;
   int widgetCount;
+  Function updateTransform;
 
   TextStoryWidget(
       {this.stackFunction,
@@ -23,7 +24,9 @@ class TextStoryWidget extends StatefulWidget {
       this.prevPositions,
       this.widgets,
       this.texts,
-      this.widgetCount});
+      this.widgetCount,
+      this.updateTransform});
+
   @override
   TextStoryWidgetState createState() => TextStoryWidgetState();
 }
@@ -35,18 +38,14 @@ class TextStoryWidgetState extends State<TextStoryWidget> {
         child: MatrixGestureDetector(
       onMatrixUpdate: (m, tm, sm, rm) {
         setState(() {
-          if (widget.widgets.length != 0 &&
-              widget.widgets[widget.current] != null) {
-            print(widget.current.toString() +
-                " --gesture--  " +widget.notifiers.length.toString()+" "+
-                widget.prev.toString());
-            if (widget.current != widget.prev) {
-              m.setIdentity();
-              m.add(widget.prevPositions[widget.current]);
-            }
-            widget.notifiers[widget.current].value = m;
-            widget.prev = widget.current;
+          if (widget.current != widget.prev) {
+            m.setIdentity();
+            m.add(widget.prevPositions[widget.current]);
           }
+
+          widget.updateTransform(m,widget.current);
+          widget.notifiers[widget.current].value = m;
+          widget.prev = widget.current;
         });
       },
       child: Stack(
@@ -58,10 +57,11 @@ class TextStoryWidgetState extends State<TextStoryWidget> {
                       },
                       child: new Container(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[Text(
-                              widget.notifiers[widget.current].value.toString()),Text(widget.current.toString()),Text(widget.widgets.length.toString())]
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+//                            Text(
+//                              widget.notifiers[widget.current].value.toString()),Text(widget.current.toString()),Text(widget.widgets.length.toString())
+                            ]),
                         color: Colors.blue,
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
@@ -71,5 +71,4 @@ class TextStoryWidgetState extends State<TextStoryWidget> {
               widget.widgets),
     ));
   }
-
 }

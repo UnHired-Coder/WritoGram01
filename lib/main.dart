@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'StoryWidgets/PainterWidgit.dart';
-import 'StoryWidgets/TextStoryPaintWidget.dart';
+import 'Backup/PainterWidgit.dart';
+import 'Backup/TextStoryPaintWidget.dart';
+import 'StoryWidgets/StoryClass.dart';
 
 void main() => runApp(MaterialApp(
-      home: MyApp(),
+      home: StoryClass(),
     ));
 
 class MyApp extends StatefulWidget {
@@ -22,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   List<TextEditingController> controllers = [];
   TextEditingController controller = new TextEditingController();
 
-  List<ValueNotifier<Matrix4>> notifiers = [ ValueNotifier(Matrix4.identity())];
+  List<ValueNotifier<Matrix4>> notifiers = [ValueNotifier(Matrix4.identity())];
   int current = 0;
   int prev = 0;
   List<Matrix4> prevPositions = [Matrix4.identity()];
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
                 widgets: widgets,
                 widgetCount: widgetCount,
                 texts: texts,
+                updateTransform: updateTransform,
               ),
             ),
             persistentFooterButtons: <Widget>[
@@ -94,7 +96,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextField(
                   controller: controller,
                   style: TextStyle(color: Colors.white),
-                  onEditingComplete: ()=>controller.clear(),
+                  onEditingComplete: () => controller.clear(),
                 ),
               ),
             ))
@@ -118,15 +120,12 @@ class _MyAppState extends State<MyApp> {
   void addNewTextWidget(String text) {
     print("Add New Text");
 
-    if(text.trim().isEmpty) {
+    if (text.trim().isEmpty) {
       stackSwitcher();
       return;
     }
 
-
-
     setState(() {
-
       notifiers.add(new ValueNotifier(Matrix4.identity()));
       prevPositions.add(Matrix4.identity());
       texts.add(text);
@@ -134,22 +133,33 @@ class _MyAppState extends State<MyApp> {
       current++;
       widgetCount++;
 
-      widgets.add(Container(
-        child: new PainterWidget(
+      widgets.add(new Container(
+          child: PainterWidget(
         notifiers: notifiers,
         text: texts[current],
         current: current,
         update: updateCurrentState,
       )));
-
     });
     stackSwitcher();
   }
 
+  void updateTransform(Matrix4 m, int index) {
+    setState(() {
+      notifiers[index - 1].value = m;
+      print("Move" + index.toString());
+    });
+  }
+
   void updateCurrentState(int index) {
     setState(() {
-//      prev = current;
       current = index;
+    });
+  }
+
+  void stateFunction(Matrix4 m, int index) {
+    setState(() {
+      print("Called");
     });
   }
 

@@ -21,7 +21,7 @@ class _PainterWidgetState extends State<PainterWidget> {
 
     print(widget.current.toString() +" _paint");
     return Positioned.fill(
-      child: Transform(
+      child: Container(
         transform: widget.notifiers[widget.current].value,
         child: FittedBox(
             fit: BoxFit.contain,
@@ -40,4 +40,9 @@ class _PainterWidgetState extends State<PainterWidget> {
       ),
     );
   }
+
+  void transformThis(){
+
+  }
+
 }
