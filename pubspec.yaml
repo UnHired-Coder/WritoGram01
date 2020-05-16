@@ -62,11 +62,48 @@ flutter:
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
+  fonts:
+    - family: DancingScript
+      fonts:
+        - asset:  fonts/Dancing_Script/static/DancingScript-Regular.ttf
+        - asset:  fonts/Dancing_Script/static/DancingScript-Bold.ttf
+        - asset:  fonts/Dancing_Script/static/DancingScript-Medium.ttf
+        - asset:  fonts/Dancing_Script/static/DancingScript-SemiBold.ttf
+    - family: Oswald
+      fonts:
+        - asset:  fonts/Oswald/static/Oswald-Regular.ttf
+        - asset:  fonts/Oswald/static/Oswald-Bold.ttf
+        - asset:  fonts/Oswald/static/Oswald-Medium.ttf
+        - asset:  fonts/Oswald/static/Oswald-SemiBold.ttf
+        - asset:  fonts/Oswald/static/Oswald-ExtraLight.ttf
+        - asset:  fonts/Oswald/static/Oswald-Light.ttf
+
+
+    - family: DM_Mono
+      fonts:
+        - asset:  fonts/DM_Mono/DMMono-Regular.ttf
+        - asset:  fonts/DM_Mono/DMMono-MediumItalic.ttf
+        - asset:  fonts/DM_Mono/DMMono-LightItalic.ttf
+        - asset:  fonts/DM_Mono/DMMono-Light.ttf
+        - asset:  fonts/DM_Mono/DMMono-Italic.ttf
+
+    - family: Pacifico
+      fonts:
+        - asset:  fonts/Pacifico/Pacifico-Regular.ttf
+
+    - family: Sacramento
+      fonts:
+        - asset:  fonts/Sacramento/Sacramento-Regular.ttf
+
+    - family: ShadowsIntoLight
+      fonts:
+        - asset:  fonts/Shadows_Into_Light/ShadowsIntoLight-Regular.ttf
+
+    - family: Fredoka_One
+      fonts:
+        - asset:  fonts/Fredoka_One/FredokaOne-Regular.ttf
+fonts:
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
