@@ -27,7 +27,6 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
             if (index != prev) {
               m.setFrom(widget.storyData[index].transform);
             }
-
             widget.updateTransform(m, index);
             prev = index;
           },
@@ -43,10 +42,15 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                     updateIndex();
                   },
                   child: Container(
-                    color: Colors.blue.withOpacity(0.5),
+                    color: widget.storyData[0].textStyle.backgroundColor != null
+                        ? widget.storyData[0].textStyle.backgroundColor
+                        : Colors.transparent,
                     child: Text(
                       widget.storyData[0].text,
-                      style: TextStyle(fontSize: 50),
+                      style: TextStyle(
+                          fontSize: widget.storyData[0].textStyle.fontSize,
+                          fontFamily: widget.storyData[0].textStyle.fontFamily,
+                          color: widget.storyData[0].textStyle.color),
                     ),
                   ),
                 ),
@@ -61,11 +65,15 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                     updateIndex();
                   },
                   child: Container(
-                    color: Colors.blue.withOpacity(0.5),
-                    padding: EdgeInsets.all(5),
+                    color: widget.storyData[1].textStyle.backgroundColor != null
+                        ? widget.storyData[1].textStyle.backgroundColor
+                        : Colors.transparent,
                     child: Text(
                       widget.storyData[1].text,
-                      style: TextStyle(fontSize: 50),
+                      style: TextStyle(
+                          fontSize: widget.storyData[0].textStyle.fontSize,
+                          fontFamily: widget.storyData[1].textStyle.fontFamily,
+                          color: widget.storyData[1].textStyle.color),
                     ),
                   ),
                 ),
@@ -80,34 +88,19 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                     updateIndex();
                   },
                   child: Container(
-                    color: Colors.blue.withOpacity(0.5),
-                    padding: EdgeInsets.all(5),
+                    color: widget.storyData[2].textStyle.backgroundColor != null
+                        ? widget.storyData[2].textStyle.backgroundColor
+                        : Colors.transparent,
                     child: Text(
                       widget.storyData[2].text,
-                      style: TextStyle(fontSize: 50),
+                      style: TextStyle(
+                          fontSize: widget.storyData[2].textStyle.fontSize,
+                          fontFamily: widget.storyData[2].textStyle.fontFamily,
+                          color: widget.storyData[2].textStyle.color),
                     ),
                   ),
                 ),
               ),
-              Container(
-                transform: widget.storyData[3].transform,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      index = 3;
-                    });
-                    updateIndex();
-                  },
-                  child: Container(
-                    color: Colors.blue.withOpacity(0.5),
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      widget.storyData[3].text,
-                      style: TextStyle(fontSize: 50),
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         )),
@@ -117,7 +110,6 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
 
   void updateIndex() {
     setState(() {
-//      index = 0;
       print("Tapped " + index.toString());
     });
   }

@@ -8,7 +8,8 @@ import 'package:writogram/imported/Swatches.dart';
 class CreateTextStory extends StatefulWidget {
   final Function doneCallback;
   final Function stackSwitchCallback;
-  CreateTextStory({this.doneCallback,this.stackSwitchCallback});
+  final int index;
+  CreateTextStory({this.doneCallback,this.stackSwitchCallback,this.index});
 
   @override
   _CreateTextStoryState createState() => _CreateTextStoryState();
@@ -202,8 +203,8 @@ class _CreateTextStoryState extends State<CreateTextStory> {
         return;
       }
 
-    TextStyle t = new TextStyle(color: color,fontFamily: textStyle.fontFamily,fontSize: size,fontStyle: FontStyle.italic);
-    TextCompleteData completeData = new TextCompleteData(text: controller.text.toString(),textStyle: t,position: Matrix4.identity(),index: 0);
+    TextStyle t = new TextStyle(color: color,fontFamily: textStyle.fontFamily,fontSize: size,fontStyle: FontStyle.italic,backgroundColor: boxColor);
+    TextCompleteData completeData = new TextCompleteData(text: controller.text.toString(),textStyle: t,position: Matrix4.identity()+Matrix4.identity(),index: widget.index);
     print("Complete Data Created");
     widget.doneCallback(completeData);
   }
@@ -217,7 +218,7 @@ class _CreateTextStoryState extends State<CreateTextStory> {
       } else {
         fillBoxIcon = Icons.check_box_outline_blank;
         fillBox = false;
-        boxColor = color.withOpacity(0.0);
+        boxColor = null;
       }
     });
   }

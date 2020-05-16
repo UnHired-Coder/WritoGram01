@@ -15,15 +15,24 @@ class _StoryClassState extends State<StoryClass> {
   List<StoryData> storyData = [];
   bool createTextVisible = false;
   bool paintStoryVisible = true;
+  static int index;
+
+  TextStyle defaultTextStyle;
+
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    storyData.add(new StoryData(Matrix4.zero(), "", 0));
-    storyData.add(new StoryData(Matrix4.identity(), "Again", 1));
-    storyData.add(new StoryData(Matrix4.identity(), "How ", 2));
-    storyData.add(new StoryData(Matrix4.identity(), "Come?", 3));
+
+    defaultTextStyle = TextStyle(color: Colors.white, fontFamily: "DM_Mono");
+
+    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 0));
+    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 1));
+    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 2));
+    storyData.add(new StoryData(Matrix4.zero(), "",defaultTextStyle, 3));
+    index = 0;
   }
 
   @override
@@ -44,7 +53,7 @@ class _StoryClassState extends State<StoryClass> {
         ),
         Visibility(
           visible: createTextVisible,
-          child: CreateTextStory(doneCallback: doneCallback,stackSwitchCallback: switchStackCallback,),
+          child: CreateTextStory(doneCallback: doneCallback,stackSwitchCallback: switchStackCallback,index: index,),
         )
       ],
     );
@@ -54,7 +63,10 @@ class _StoryClassState extends State<StoryClass> {
     print("DoneCallBack");
     setState(() {
       storyData[completeData.index].text = completeData.text;
+      storyData[completeData.index].transform = completeData.position;
+      storyData[completeData.index].textStyle = completeData.textStyle;
       switchStackCallback();
+      index++;
     });
 
   }
