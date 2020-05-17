@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:writogram/Animations/ButtonBounceAnimation.dart';
+import 'package:writogram/Modals/StoryData.dart';
 import 'package:writogram/Modals/TextCompleteData.dart';
 import 'package:writogram/Widgets/CustomTextStoryWodgets/CustomFontChooserWidget.dart';
 import 'package:writogram/imported/Swatches.dart';
@@ -11,13 +12,16 @@ class CreateTextStory extends StatefulWidget {
   final Function stackSwitchCallback;
   final int index;
   final bool edit;
+  final StoryData completeData;
+
 
   CreateTextStory(
       {this.doneCallback,
       this.editDoneCallback,
       this.stackSwitchCallback,
       this.index,
-      this.edit});
+      this.edit,
+      this.completeData});
 
   @override
   _CreateTextStoryState createState() => _CreateTextStoryState();
@@ -39,21 +43,36 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.edit){
     fillBoxIcon = Icons.check_box_outline_blank;
-    textStyle = TextStyle(color: Colors.white, fontFamily: "DM_Mono");
-    color = Colors.white;
-    size = 50;
-    boxColor = Colors.transparent;
+    textStyle = widget.completeData.textStyle;
+    color = widget.completeData.textStyle.color;
+    size = widget.completeData.textStyle.fontSize;
+    if(boxColor==null)
     fillBox = false;
-    valueHolder = 50;
+    else
+    fillBox  = true;
+    valueHolder = 35;
     sliderVisible = true;
     controller = new TextEditingController();
+    controller.text = widget.completeData.text;}
+    else{
+      fillBoxIcon = Icons.check_box_outline_blank;
+      textStyle = TextStyle(fontSize: 35,color: Colors.white,fontFamily: "DM_Mono");
+      color = Colors.white;
+      size = 35;
+      fillBox = false;
+      valueHolder = 35;
+      sliderVisible = true;
+      controller = new TextEditingController();
+      controller.text = "";
+  }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.transparent.withOpacity(0.5),
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Row(

@@ -15,17 +15,21 @@ class _StoryClassState extends State<StoryClass> {
   List<StoryData> storyData = [];
   bool createTextVisible = false;
   bool paintStoryVisible = true;
+  bool actionButtonVisible = true;
+
   static int index;
   static int editIndex;
   static bool edit;
   TextStyle defaultTextStyle;
+  StoryData editTextCompleteData;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    defaultTextStyle = TextStyle(color: Colors.white, fontFamily: "DM_Mono");
+    defaultTextStyle =
+        TextStyle(color: Colors.white, fontFamily: "DM_Mono", fontSize: 35);
 
     storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 0));
     storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 1));
@@ -34,6 +38,9 @@ class _StoryClassState extends State<StoryClass> {
     index = 0;
     editIndex = 0;
     edit = false;
+
+    editTextCompleteData =
+        new StoryData(Matrix4.zero(), "", defaultTextStyle, 0);
   }
 
   @override
@@ -41,12 +48,15 @@ class _StoryClassState extends State<StoryClass> {
     return Stack(
       children: <Widget>[
         Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
-            backgroundColor: Colors.grey.withOpacity(0.4),
-            title: Container(
-                margin: EdgeInsets.all(2), child: getTopIcons(context)),
+            backgroundColor: Colors.transparent,
+            title: Visibility(
+              visible: actionButtonVisible,
+              child: Container(
+                  margin: EdgeInsets.all(2), child: getTopIcons(context)),
+            ),
           ),
-          backgroundColor: Colors.grey.withOpacity(0.4),
           body: Visibility(
             maintainState: true,
             visible: paintStoryVisible,
@@ -55,11 +65,14 @@ class _StoryClassState extends State<StoryClass> {
                 storyData: storyData,
                 updateTransform: updateTransform,
                 stackSwitchCallback: switchStackCallback,
-                  editCallback:editCallback,
+                editCallback: editCallback,
               ),
             ),
           ),
-          persistentFooterButtons: <Widget>[getBottomIcons(context)],
+          persistentFooterButtons: <Widget>[
+            Visibility(
+                visible: actionButtonVisible, child: getBottomIcons(context))
+          ],
         ),
         Visibility(
           visible: createTextVisible,
@@ -69,6 +82,7 @@ class _StoryClassState extends State<StoryClass> {
             stackSwitchCallback: switchStackCallback,
             index: index,
             edit: edit,
+            completeData: editTextCompleteData,
           ),
         )
       ],
@@ -86,33 +100,31 @@ class _StoryClassState extends State<StoryClass> {
     index++;
   }
 
-
   void editCallback(index) {
-    print("Double Tapped  Edit --Story Class  "+index.toString());
+    print("Double Tapped  Edit --Story Class  " + index.toString());
     switchStackCallback();
     setState(() {
       edit = true;
       editIndex = index;
+      editTextCompleteData = storyData[index];
       createTextVisible = true;
     });
-
   }
-
 
   void editDoneCallback(TextCompleteData completeData) {
     print("Edit Done  Edit");
     setState(() {
       storyData[editIndex].text = completeData.text;
-//      storyData[editIndex].transform = completeData.position;
       storyData[editIndex].textStyle = completeData.textStyle;
+      edit = false;
       switchStackCallback();
     });
-
   }
 
   void updateTransform(Matrix4 m, int index) {
     setState(() {
       storyData[index].transform = m;
+      actionButtonVisible = false;
     });
   }
 
@@ -164,7 +176,10 @@ class _StoryClassState extends State<StoryClass> {
             Icons.save_alt,
             color: Colors.white,
           ),
-        ),Container(width: 200,),
+        ),
+        Container(
+          width: 200,
+        ),
         Container(
           margin: EdgeInsets.only(left: 10, right: 10),
           child: Icon(
