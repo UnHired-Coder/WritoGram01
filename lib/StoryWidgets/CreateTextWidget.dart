@@ -7,10 +7,17 @@ import 'package:writogram/imported/Swatches.dart';
 
 class CreateTextStory extends StatefulWidget {
   final Function doneCallback;
+  final Function editDoneCallback;
   final Function stackSwitchCallback;
   final int index;
+  final bool edit;
 
-  CreateTextStory({this.doneCallback, this.stackSwitchCallback, this.index});
+  CreateTextStory(
+      {this.doneCallback,
+      this.editDoneCallback,
+      this.stackSwitchCallback,
+      this.index,
+      this.edit});
 
   @override
   _CreateTextStoryState createState() => _CreateTextStoryState();
@@ -198,8 +205,9 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   }
 
   void doneCallback() {
+    print("Edit Done");
     if (controller.text.toString().trim().isEmpty) {
-      widget.stackSwitchCallback();
+         widget.stackSwitchCallback();
       return;
     }
 
@@ -221,6 +229,9 @@ class _CreateTextStoryState extends State<CreateTextStory> {
         position: Matrix4.identity(),
         index: widget.index);
     print("Complete Data Created");
+    if(widget.edit)
+      widget.editDoneCallback(completeData);
+    else
     widget.doneCallback(completeData);
   }
 

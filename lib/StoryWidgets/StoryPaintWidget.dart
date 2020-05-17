@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
+import 'package:vibration/vibration.dart';
 import 'package:writogram/Modals/StoryData.dart';
 
 class StoryPaintWidget extends StatefulWidget {
   final List<StoryData> storyData;
   final Function updateTransform;
-
-  StoryPaintWidget({this.storyData, this.updateTransform});
+  final Function editCallback;
+  StoryPaintWidget({this.storyData, this.updateTransform,this.editCallback});
 
   @override
   _StoryPaintWidgetState createState() => _StoryPaintWidgetState();
@@ -22,7 +23,6 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-//      alignment: Alignment.center,
       children: <Widget>[
         Positioned.fill(
             child: MatrixGestureDetector(
@@ -31,7 +31,6 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
               m.setZero();
               m.add(widget.storyData[index].transform);
               print("Index: " + index.toString() + " Prev: " + prev.toString());
-//              prev = index;
               print("Index: " + index.toString() + " Prev: " + prev.toString());
             }
             widget.updateTransform(m, index);
@@ -43,10 +42,18 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                 transform: widget.storyData[0].transform,
                 child: GestureDetector(
                   onTap: () {
+                    Vibration.vibrate(duration: 100);
                     setState(() {
                       index = 0;
                     });
                     updateIndex();
+                  },
+                  onDoubleTap: () {
+                    setState(() {
+                      index = 0;
+                    });
+                    updateIndex();
+                    editCallback(index);
                   },
                   child: Container(
                     color: widget.storyData[0].textStyle.backgroundColor != null
@@ -67,10 +74,18 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                 transform: widget.storyData[1].transform,
                 child: GestureDetector(
                   onTap: () {
+                    Vibration.vibrate(duration: 100);
                     setState(() {
                       index = 1;
                     });
                     updateIndex();
+                  },
+                  onDoubleTap: () {
+                    setState(() {
+                      index = 1;
+                    });
+                    updateIndex();
+                    editCallback(index);
                   },
                   child: Container(
                     color: widget.storyData[1].textStyle.backgroundColor != null
@@ -91,10 +106,18 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
                 transform: widget.storyData[2].transform,
                 child: GestureDetector(
                   onTap: () {
+                    Vibration.vibrate(duration: 100);
                     setState(() {
                       index = 2;
                     });
                     updateIndex();
+                  },
+                  onDoubleTap: () {
+                    setState(() {
+                      index = 2;
+                    });
+                    updateIndex();
+                    editCallback(index);
                   },
                   child: Container(
                     color: widget.storyData[2].textStyle.backgroundColor != null
@@ -119,8 +142,11 @@ class _StoryPaintWidgetState extends State<StoryPaintWidget> {
   }
 
   void updateIndex() {
-    setState(() {
-      print("Tapped " + index.toString());
-    });
+    print("Tapped " + index.toString());
+  }
+
+  void editCallback(int index) {
+    print("Double Tapped " + index.toString());
+    widget.editCallback(index);
   }
 }

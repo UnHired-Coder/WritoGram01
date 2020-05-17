@@ -10,9 +10,10 @@ class StoryWidgetHandler extends StatefulWidget {
   final List<StoryData> storyData;
   final Function updateTransform;
   final Function stackSwitchCallback;
+  final Function editCallback;
 
   StoryWidgetHandler(
-      {this.storyData, this.updateTransform, this.stackSwitchCallback});
+      {this.storyData, this.updateTransform, this.stackSwitchCallback,this.editCallback});
 
   @override
   _StoryWidgetHandlerState createState() => _StoryWidgetHandlerState();
@@ -63,6 +64,7 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
           child: StoryPaintWidget(
             storyData: widget.storyData,
             updateTransform: updateTransform,
+            editCallback:editCallback,
           )),
     );
   }
@@ -85,7 +87,14 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
     });
   }
 
+
+
   void updateTransform(Matrix4 m, int index) {
     widget.updateTransform(m, index);
+  }
+
+  void editCallback(int index) {
+    print("Double Tapped  Edit Handeler");
+    widget.editCallback(index);
   }
 }

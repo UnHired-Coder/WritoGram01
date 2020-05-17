@@ -16,7 +16,8 @@ class _StoryClassState extends State<StoryClass> {
   bool createTextVisible = false;
   bool paintStoryVisible = true;
   static int index;
-
+  static int editIndex;
+  static bool edit;
   TextStyle defaultTextStyle;
 
   @override
@@ -31,6 +32,8 @@ class _StoryClassState extends State<StoryClass> {
     storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 2));
     storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 3));
     index = 0;
+    editIndex = 0;
+    edit = false;
   }
 
   @override
@@ -52,6 +55,7 @@ class _StoryClassState extends State<StoryClass> {
                 storyData: storyData,
                 updateTransform: updateTransform,
                 stackSwitchCallback: switchStackCallback,
+                  editCallback:editCallback,
               ),
             ),
           ),
@@ -61,8 +65,10 @@ class _StoryClassState extends State<StoryClass> {
           visible: createTextVisible,
           child: CreateTextStory(
             doneCallback: doneCallback,
+            editDoneCallback: editDoneCallback,
             stackSwitchCallback: switchStackCallback,
             index: index,
+            edit: edit,
           ),
         )
       ],
@@ -78,6 +84,30 @@ class _StoryClassState extends State<StoryClass> {
       switchStackCallback();
     });
     index++;
+  }
+
+
+  void editCallback(index) {
+    print("Double Tapped  Edit --Story Class  "+index.toString());
+    switchStackCallback();
+    setState(() {
+      edit = true;
+      editIndex = index;
+      createTextVisible = true;
+    });
+
+  }
+
+
+  void editDoneCallback(TextCompleteData completeData) {
+    print("Edit Done  Edit");
+    setState(() {
+      storyData[editIndex].text = completeData.text;
+//      storyData[editIndex].transform = completeData.position;
+      storyData[editIndex].textStyle = completeData.textStyle;
+      switchStackCallback();
+    });
+
   }
 
   void updateTransform(Matrix4 m, int index) {
