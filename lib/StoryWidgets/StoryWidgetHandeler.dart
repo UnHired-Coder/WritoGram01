@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
@@ -30,7 +29,7 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
     super.initState();
     backgroundColor = Colors.black;
     backgroundColors.add(Colors.black);
-    for (int i = 0; i < swatches.length; i += 10) {
+    for (int i = 0; i < swatches.length; i += 5) {
       backgroundColors.add(swatches[i].withOpacity(1));
     }
     disabled = false;
@@ -39,20 +38,21 @@ class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onHorizontalDragEnd: (value) {
-        setState(() {
-          disabled = false;
-        });
-      },
-      onHorizontalDragStart: (value) {
-      setState(() {
-        disabled = true;
-      });
-    },
-      onHorizontalDragUpdate: (value) {
-        debugPrint("Slide to Change backGround");
-        updateBackground(value.globalPosition.dx);
-      },
+      //TODO:: Uncomment for swipe to change background
+//      onHorizontalDragEnd: (value) {
+//        setState(() {
+//          disabled = false;
+//        });
+//      },
+//      onHorizontalDragStart: (value) {
+//      setState(() {
+//        disabled = true;
+//      });
+//    },
+//      onHorizontalDragUpdate: (value) {
+//        debugPrint("Slide to Change backGround");
+//        updateBackground(value.globalPosition.dx);
+//      },
       onTap: () {
         widget.stackSwitchCallback();
       },

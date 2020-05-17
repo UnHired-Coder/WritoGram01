@@ -32,8 +32,6 @@ class _MyAppState extends State<MyApp> {
   List<String> texts = [""];
   int widgetCount = 0;
 
-
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -193,7 +191,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget getTopIcons(context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(left: 10, right: 10),

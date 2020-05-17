@@ -38,6 +38,12 @@ class _StoryClassState extends State<StoryClass> {
     return Stack(
       children: <Widget>[
         Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.grey.withOpacity(0.4),
+            title: Container(
+                margin: EdgeInsets.all(2), child: getTopIcons(context)),
+          ),
+          backgroundColor: Colors.grey.withOpacity(0.4),
           body: Visibility(
             maintainState: true,
             visible: paintStoryVisible,
@@ -49,6 +55,7 @@ class _StoryClassState extends State<StoryClass> {
               ),
             ),
           ),
+          persistentFooterButtons: <Widget>[getBottomIcons(context)],
         ),
         Visibility(
           visible: createTextVisible,
@@ -83,11 +90,66 @@ class _StoryClassState extends State<StoryClass> {
     setState(() {
       if (!createTextVisible) {
         createTextVisible = true;
-        paintStoryVisible = false;
+//        paintStoryVisible = false;
       } else {
         createTextVisible = false;
         paintStoryVisible = true;
       }
     });
+  }
+
+  Widget getBottomIcons(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Icon(
+            Icons.save_alt,
+            color: Colors.white,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Container(
+            margin: EdgeInsets.only(right: 15, left: 10),
+            child: Icon(
+              Icons.donut_large,
+              size: 35,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget getTopIcons(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Icon(
+            Icons.save_alt,
+            color: Colors.white,
+          ),
+        ),Container(width: 200,),
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Icon(
+            Icons.format_paint,
+            color: Colors.white,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Icon(
+            Icons.text_fields,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
   }
 }

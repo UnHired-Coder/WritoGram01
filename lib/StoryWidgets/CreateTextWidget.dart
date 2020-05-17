@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:writogram/Animations/ButtonBounceAnimation.dart';
 import 'package:writogram/Modals/TextCompleteData.dart';
 import 'package:writogram/Widgets/CustomTextStoryWodgets/CustomFontChooserWidget.dart';
 import 'package:writogram/imported/Swatches.dart';
@@ -45,16 +46,17 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                fillBoxSwitch();
-              },
+            ButtonBounceAnimation(
+              scale: 1,
+              duration: 500,
+              how: 1,
+              onTapCallBack: fillBoxSwitch,
               child: Icon(
                 fillBoxIcon,
                 size: 25,
@@ -85,7 +87,7 @@ class _CreateTextStoryState extends State<CreateTextStory> {
               children: <Widget>[
                 Container(
                     alignment: Alignment.center,
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.transparent,
                     child: TextField(
                       controller: controller,
                       textAlign: TextAlign.center,

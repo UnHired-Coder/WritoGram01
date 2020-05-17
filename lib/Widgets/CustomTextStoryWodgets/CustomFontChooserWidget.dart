@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:writogram/Modals/FontTextStory.dart';
+import 'package:writogram/Animations/ButtonBounceAnimation.dart';
 
 class CustomFontChooserWidget extends StatefulWidget {
   final Function fontChangedCallBack;
@@ -35,30 +35,30 @@ class _CustomFontChooserWidgetState extends State<CustomFontChooserWidget> {
     ];
 
     q.addAll([
-      createFontWidget( stylesText[0]),
-      createFontWidget( stylesText[1]),
-      createFontWidget( stylesText[2]),
-      createFontWidget( stylesText[3]),
-      createFontWidget( stylesText[4]),
-      createFontWidget( stylesText[5]),
+      createFontWidget(stylesText[0]),
+      createFontWidget(stylesText[1]),
+      createFontWidget(stylesText[2]),
+      createFontWidget(stylesText[3]),
+      createFontWidget(stylesText[4]),
+      createFontWidget(stylesText[5]),
     ]);
 
-    index.addAll([0,1,2,3,4,5]);
+    index.addAll([0, 1, 2, 3, 4, 5]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(2),
-      child: GestureDetector(
-        onTap: () {
-          updateQueue();
-        },
-        child: Stack(
-          children: <Widget>[q.first],
-        ),
-      ),
-    );
+    return ButtonBounceAnimation(
+        scale: 1,
+        duration: 500,
+        how: 1,
+        onTapCallBack: updateQueue,
+        child: Container(
+          padding: EdgeInsets.all(2),
+          child: Stack(
+            children: <Widget>[q.first],
+          ),
+        ));
   }
 
   updateQueue() {
