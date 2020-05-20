@@ -6,7 +6,8 @@ class StoryData{
   String text;
   int index;
   TextStyle textStyle;
-  StoryData(this.transform, this.text,this.textStyle,this.index);
+  TextAlign alignment;
+  StoryData(this.transform, this.text,this.textStyle,this.index,this.alignment);
 
 
 }

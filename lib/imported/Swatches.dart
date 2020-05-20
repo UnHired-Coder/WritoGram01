@@ -333,8 +333,6 @@ List<Color> swatches = [
   Colors.blueGrey[900], //blueGrey[900]
 
   Colors.transparent, //transparent
-  Colors.black, //black
-  Colors.black87, //black87
   Colors.black54, //black54
   Colors.black45, //black45
   Colors.black38, //black38

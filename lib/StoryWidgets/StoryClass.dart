@@ -1,7 +1,13 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:writogram/Animations/ButtonBounceAnimation.dart';
 import 'package:writogram/Modals/StoryData.dart';
 import 'package:writogram/Modals/TextCompleteData.dart';
+import 'package:writogram/imported/Swatches.dart';
+
+
 
 import 'CreateTextWidget.dart';
 import 'StoryWidgetHandeler.dart';
@@ -22,6 +28,8 @@ class _StoryClassState extends State<StoryClass> {
   static bool edit;
   TextStyle defaultTextStyle;
   StoryData editTextCompleteData;
+  Color backgroundColor = Colors.transparent;
+  Queue<Color> backgroundColors = new Queue();
 
   @override
   void initState() {
@@ -31,17 +39,29 @@ class _StoryClassState extends State<StoryClass> {
     defaultTextStyle =
         TextStyle(color: Colors.white, fontFamily: "DM_Mono", fontSize: 35);
 
-    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 0));
-    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 1));
-    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 2));
-    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 3));
+
+
+    // HERE
+    storyData.add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 0,TextAlign.center));
     index = 0;
     editIndex = 0;
     edit = false;
 
+
+
     editTextCompleteData =
-        new StoryData(Matrix4.zero(), "", defaultTextStyle, 0);
+        new StoryData(Matrix4.zero(), "", defaultTextStyle, 0,TextAlign.center);
+
+
+
+    backgroundColors.add(Colors.black);
+    for (int i = 0; i < swatches.length; i += 5) {
+      backgroundColors.add(swatches[i].withOpacity(1));
+    }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +84,37 @@ class _StoryClassState extends State<StoryClass> {
               child: StoryWidgetHandler(
                 storyData: storyData,
                 updateTransform: updateTransform,
+                updateEnded: updateEnded,
                 stackSwitchCallback: switchStackCallback,
                 editCallback: editCallback,
+                backgroundColor: backgroundColor,
               ),
             ),
           ),
           persistentFooterButtons: <Widget>[
             Visibility(
-                visible: actionButtonVisible, child: getBottomIcons(context))
+                visible: actionButtonVisible,
+                child: Row(children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height/25,
+                    alignment: Alignment.bottomLeft,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: backgroundColor,
+                        border: Border.all(color: Colors.white, width: 2)),
+                    width: MediaQuery.of(context).size.width - 250,
+                    margin: EdgeInsets.only(left: 5, right: 5),
+                    child: GestureDetector(
+                      onVerticalDragStart: (value) {
+                        print("Dragged to change Background " +
+                            value.localPosition.dx.toString());
+                        updateBackground(value.localPosition.dx);
+                      },
+                    ),
+                  ),
+                  Container(width: MediaQuery.of(context).size.width/5,height: 30,),
+                  Container(child: getBottomIcons(context))
+                ])),
           ],
         ),
         Visibility(
@@ -89,6 +132,8 @@ class _StoryClassState extends State<StoryClass> {
     );
   }
 
+
+
   void doneCallback(TextCompleteData completeData) {
     print("DoneCallBack");
     setState(() {
@@ -99,6 +144,8 @@ class _StoryClassState extends State<StoryClass> {
     });
     index++;
   }
+
+
 
   void editCallback(index) {
     print("Double Tapped  Edit --Story Class  " + index.toString());
@@ -111,15 +158,20 @@ class _StoryClassState extends State<StoryClass> {
     });
   }
 
+
+
   void editDoneCallback(TextCompleteData completeData) {
     print("Edit Done  Edit");
+    switchStackCallback();
     setState(() {
       storyData[editIndex].text = completeData.text;
       storyData[editIndex].textStyle = completeData.textStyle;
+      print(completeData.textStyle.fontSize.toString());
       edit = false;
-      switchStackCallback();
     });
   }
+
+
 
   void updateTransform(Matrix4 m, int index) {
     setState(() {
@@ -127,6 +179,17 @@ class _StoryClassState extends State<StoryClass> {
       actionButtonVisible = false;
     });
   }
+
+
+
+  void updateEnded(ScaleEndDetails details) {
+    setState(() {
+      actionButtonVisible = true;
+      print("Update Ended");
+    });
+  }
+
+
 
   void switchStackCallback() {
     setState(() {
@@ -139,6 +202,8 @@ class _StoryClassState extends State<StoryClass> {
       }
     });
   }
+
+
 
   Widget getBottomIcons(context) {
     return Row(
@@ -166,35 +231,55 @@ class _StoryClassState extends State<StoryClass> {
     );
   }
 
+
   Widget getTopIcons(context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
+
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: Icon(
-            Icons.save_alt,
-            color: Colors.white,
+        ButtonBounceAnimation(
+          scale: 1,
+          duration: 300,
+          how: 1,
+          onTapCallBack: switchStackCallback,
+          child: Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Icon(
+              Icons.format_paint,
+              color: Colors.white,
+            ),
           ),
         ),
-        Container(
-          width: 200,
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: Icon(
-            Icons.format_paint,
-            color: Colors.white,
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: Icon(
-            Icons.text_fields,
-            color: Colors.white,
+        ButtonBounceAnimation(
+          scale: 1,
+          duration: 300,
+          how: 1,
+          onTapCallBack: switchStackCallback,
+          child: Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Icon(
+              Icons.text_fields,
+              color: Colors.white,
+            ),
           ),
         ),
       ],
     );
+  }
+
+
+  updateBackground(double value) {
+    setState(() {
+      print("Update Background " + value.toString());
+      if (value > 100) {
+        backgroundColor = backgroundColors.last;
+        backgroundColors.addFirst(backgroundColors.last);
+        backgroundColors.removeLast();
+      } else if (value < 100) {
+        backgroundColor = backgroundColors.first;
+        backgroundColors.addLast(backgroundColors.first);
+        backgroundColors.removeFirst();
+      }
+    });
   }
 }

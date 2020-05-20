@@ -4,90 +4,70 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:writogram/Modals/StoryData.dart';
 import 'StoryPaintWidget.dart';
-import 'package:writogram/imported/Swatches.dart';
 
 class StoryWidgetHandler extends StatefulWidget {
   final List<StoryData> storyData;
   final Function updateTransform;
+  final Function updateEnded;
   final Function stackSwitchCallback;
   final Function editCallback;
+  Color backgroundColor;
 
   StoryWidgetHandler(
-      {this.storyData, this.updateTransform, this.stackSwitchCallback,this.editCallback});
+      {this.storyData,
+      this.updateTransform,
+      this.updateEnded,
+      this.stackSwitchCallback,
+      this.editCallback,
+      this.backgroundColor});
 
   @override
   _StoryWidgetHandlerState createState() => _StoryWidgetHandlerState();
 }
 
 class _StoryWidgetHandlerState extends State<StoryWidgetHandler> {
-  Queue<Color> backgroundColors = new Queue();
-  Color backgroundColor;
   bool disabled;
+  TextStyle defaultTextStyle;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    backgroundColor = Colors.black;
-    backgroundColors.add(Colors.black);
-    for (int i = 0; i < swatches.length; i += 5) {
-      backgroundColors.add(swatches[i].withOpacity(1));
-    }
+    defaultTextStyle =
+        TextStyle(color: Colors.white, fontFamily: "DM_Mono", fontSize: 35);
+    widget.backgroundColor = Colors.black;
     disabled = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      //TODO:: Uncomment for swipe to change background
-//      onHorizontalDragEnd: (value) {
-//        setState(() {
-//          disabled = false;
-//        });
-//      },
-//      onHorizontalDragStart: (value) {
-//      setState(() {
-//        disabled = true;
-//      });
-//    },
-//      onHorizontalDragUpdate: (value) {
-//        debugPrint("Slide to Change backGround");
-//        updateBackground(value.globalPosition.dx);
-//      },
       onTap: () {
+        widget.storyData
+            .add(new StoryData(Matrix4.zero(), "", defaultTextStyle, 0,TextAlign.center));
         widget.stackSwitchCallback();
       },
       child: AnimatedContainer(
           duration: Duration(milliseconds: 500),
-          color: backgroundColor,
+          decoration: BoxDecoration(color: widget.backgroundColor),
+//          decoration: BoxDecoration(
+//              borderRadius: BorderRadius.circular(40),
+//              image: DecorationImage(
+//                  image: AssetImage("images/back.jpg"), fit: BoxFit.cover)),
           padding: EdgeInsets.all(10),
           child: StoryPaintWidget(
             storyData: widget.storyData,
             updateTransform: updateTransform,
-            editCallback:editCallback,
+            updateEnded: updateEnded,
+            editCallback: editCallback,
           )),
     );
   }
 
-  updateBackground(double value) {
-    if (!disabled) return;
-    setState(() {
-      print("Update Background " + value.toString());
-      if (value > 400) {
-        disabled = false;
-        backgroundColors.addFirst(backgroundColors.last);
-        backgroundColors.removeLast();
-        backgroundColor = backgroundColors.first;
-      } else if (value < 50) {
-        disabled = false;
-        backgroundColors.addLast(backgroundColors.first);
-        backgroundColors.removeFirst();
-        backgroundColor = backgroundColors.last;
-      }
-    });
+  void updateEnded(ScaleEndDetails details) {
+    widget.updateEnded(details);
+    print("Update Ended");
   }
-
-
 
   void updateTransform(Matrix4 m, int index) {
     widget.updateTransform(m, index);

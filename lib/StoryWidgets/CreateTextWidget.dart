@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:writogram/Animations/ButtonBounceAnimation.dart';
 import 'package:writogram/Modals/StoryData.dart';
 import 'package:writogram/Modals/TextCompleteData.dart';
+import 'package:writogram/Widgets/CustomTextStoryWodgets/CustomAlignmentWidget.dart';
 import 'package:writogram/Widgets/CustomTextStoryWodgets/CustomFontChooserWidget.dart';
+import 'package:writogram/Widgets/CustomTextStoryWodgets/CustomSeekBar.dart';
 import 'package:writogram/imported/Swatches.dart';
+
 
 class CreateTextStory extends StatefulWidget {
   final Function doneCallback;
@@ -13,7 +16,6 @@ class CreateTextStory extends StatefulWidget {
   final int index;
   final bool edit;
   final StoryData completeData;
-
 
   CreateTextStory(
       {this.doneCallback,
@@ -33,7 +35,7 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   Color color;
   Color boxColor;
   double size;
-
+  TextAlign alignment;
   IconData fillBoxIcon;
   bool fillBox;
   double valueHolder;
@@ -43,30 +45,33 @@ class _CreateTextStoryState extends State<CreateTextStory> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.edit){
-    fillBoxIcon = Icons.check_box_outline_blank;
-    textStyle = widget.completeData.textStyle;
-    color = widget.completeData.textStyle.color;
-    size = widget.completeData.textStyle.fontSize;
-    if(boxColor==null)
-    fillBox = false;
-    else
-    fillBox  = true;
-    valueHolder = 35;
-    sliderVisible = true;
-    controller = new TextEditingController();
-    controller.text = widget.completeData.text;}
-    else{
+    if (widget.edit) {
       fillBoxIcon = Icons.check_box_outline_blank;
-      textStyle = TextStyle(fontSize: 35,color: Colors.white,fontFamily: "DM_Mono");
+      textStyle = widget.completeData.textStyle;
+      color = widget.completeData.textStyle.color;
+      size = widget.completeData.textStyle.fontSize;
+      alignment = widget.completeData.alignment;
+      print(size);
+      if (boxColor == null)
+        fillBox = false;
+      else
+        fillBox = true;
+      valueHolder = size;
+      sliderVisible = true;
+      controller = new TextEditingController();
+      controller.text = widget.completeData.text;
+    } else {
+      fillBoxIcon = Icons.check_box_outline_blank;
+      textStyle = TextStyle(color: Colors.white, fontFamily: "DM_Mono");
       color = Colors.white;
-      size = 35;
+      size = 50;
+      alignment = TextAlign.center;
       fillBox = false;
-      valueHolder = 35;
+      valueHolder = 50;
       sliderVisible = true;
       controller = new TextEditingController();
       controller.text = "";
-  }
+    }
   }
 
   @override
@@ -78,17 +83,23 @@ class _CreateTextStoryState extends State<CreateTextStory> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            ButtonBounceAnimation(
-              scale: 1,
-              duration: 500,
-              how: 1,
-              onTapCallBack: fillBoxSwitch,
-              child: Icon(
-                fillBoxIcon,
-                size: 25,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                ButtonBounceAnimation(
+                  scale: 1,
+                  duration: 500,
+                  how: 1,
+                  onTapCallBack: fillBoxSwitch,
+                  child: Icon(
+                    fillBoxIcon,
+                    size: 25,
+                  ),
+                ),
+                CustomAlignmentWidget(
+                    onAlignmentChangedCallback: alignmentChangedCallback),
+              ],
             ),
-            Container(),
             CustomFontChooserWidget(
               fontChangedCallBack: fontChangedCallback,
             ),
@@ -116,9 +127,10 @@ class _CreateTextStoryState extends State<CreateTextStory> {
                     color: Colors.transparent,
                     child: TextField(
                       controller: controller,
-                      textAlign: TextAlign.center,
+                      textAlign: alignment,
                       decoration: InputDecoration.collapsed(
                         hintText: "Text..",
+                        hintStyle: TextStyle(color: Colors.white),
                         border: InputBorder.none,
                       ),
                       style: TextStyle(
@@ -142,44 +154,8 @@ class _CreateTextStoryState extends State<CreateTextStory> {
                   onVerticalDragEnd: (value) {
                     setState(() {});
                   },
-                  child: RotatedBox(
-                    quarterTurns: 1,
-                    child: Container(
-                      width: MediaQuery.of(context).size.height,
-                      height: 10,
-                      margin: EdgeInsets.only(
-                          bottom: 12,
-                          top: 12,
-                          left: MediaQuery.of(context).size.height / 10,
-                          right: MediaQuery.of(context).size.height / 20),
-                      alignment: Alignment.center,
-                      color: Colors.grey,
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Colors.white,
-                          thumbShape:
-                              RoundSliderThumbShape(enabledThumbRadius: 10.0),
-                          overlayShape:
-                              RoundSliderOverlayShape(overlayRadius: 0.0),
-                        ),
-                        child: Visibility(
-                          visible: sliderVisible,
-                          child: Slider(
-                              inactiveColor: Colors.white,
-                              activeColor: Colors.white,
-                              value: valueHolder,
-                              min: 5,
-                              max: 100,
-                              onChanged: (value) {
-                                print(value);
-                                setState(() {
-                                  valueHolder = value;
-                                  size = valueHolder;
-                                });
-                              }),
-                        ),
-                      ),
-                    ),
+                  child: CustomSeekBar(
+                    onDragUpdate: onFontScaledCallback,
                   ),
                 ),
               ],
@@ -216,6 +192,13 @@ class _CreateTextStoryState extends State<CreateTextStory> {
     );
   }
 
+  void onFontScaledCallback(double value) {
+    setState(() {
+      size = value;
+      print("--------");
+    });
+  }
+
   void fontChangedCallback(TextStyle t) {
     debugPrint("FontChanged");
     setState(() {
@@ -223,19 +206,18 @@ class _CreateTextStoryState extends State<CreateTextStory> {
     });
   }
 
+  void alignmentChangedCallback(TextAlign align) {
+    setState(() {
+      alignment = align;
+    });
+  }
+
   void doneCallback() {
     print("Edit Done");
     if (controller.text.toString().trim().isEmpty) {
-         widget.stackSwitchCallback();
-      return;
-    }
-
-    //TODO:: Remove this later.
-    if (widget.index > 2) {
       widget.stackSwitchCallback();
       return;
     }
-
     TextStyle t = new TextStyle(
         color: color,
         fontFamily: textStyle.fontFamily,
@@ -248,10 +230,10 @@ class _CreateTextStoryState extends State<CreateTextStory> {
         position: Matrix4.identity(),
         index: widget.index);
     print("Complete Data Created");
-    if(widget.edit)
+    if (widget.edit)
       widget.editDoneCallback(completeData);
     else
-    widget.doneCallback(completeData);
+      widget.doneCallback(completeData);
   }
 
   void fillBoxSwitch() {

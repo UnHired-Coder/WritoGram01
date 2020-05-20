@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
-import 'file:///E:/Flutter/firestore_app/writo_gram/lib/Backup/PainterWidgit.dart';
 
 class TextStoryWidget extends StatefulWidget {
   final Function stackFunction;
